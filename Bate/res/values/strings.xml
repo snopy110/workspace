@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bate</string>
+    <string name="update_version">update version</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="more_bate">more bate</string>
+    
+    <!-- button name -->
+    <string name="button_confirm">confirm</string>
+    
+    <!-- log -->
+    <string name="sensor_log">sensor log</string>
+    <string name="opengl_cube">opengl cube</string>
+    
+    <!-- alert -->
+    <string name="alter_title_write_false"> file write faile</string>
+    <string name="alter_title_read_false"> file read faile</string>
+
+</resources>
