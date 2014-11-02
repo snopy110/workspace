@@ -55,20 +55,21 @@ public final class R {
         public static final int main=0x7f080000;
     }
     public static final class string {
-        public static final int alter_title_read_false=0x7f060008;
+        public static final int alter_title_read_false=0x7f060009;
         /**  alert 
          */
-        public static final int alter_title_write_false=0x7f060007;
+        public static final int alter_title_write_false=0x7f060008;
         public static final int app_name=0x7f060000;
         /**  button name 
          */
-        public static final int button_confirm=0x7f060004;
+        public static final int button_confirm=0x7f060005;
         public static final int hello_world=0x7f060002;
+        public static final int ip_info_null=0x7f060004;
         public static final int more_bate=0x7f060003;
-        public static final int opengl_cube=0x7f060006;
+        public static final int opengl_cube=0x7f060007;
         /**  log 
          */
-        public static final int sensor_log=0x7f060005;
+        public static final int sensor_log=0x7f060006;
         public static final int update_version=0x7f060001;
     }
     public static final class style {

@@ -9,12 +9,15 @@ import java.util.TreeSet;
 
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
-import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +33,7 @@ import android.widget.TextView;
 
 import com.wtf.R;
 import com.wtf.bate.sensor.SensorLogActivity;
-import com.wtf.common.update.UpdateActivity;
+import com.wtf.common.CommonActivity;
 import com.wtf.common.update.UpdateService;
 import com.wtf.common.update.UpdateUtils;
 import com.wtf.opengl.OpenGlActivity;
@@ -40,7 +43,7 @@ import com.wtf.opengl.OpenGlActivity;
  *
  */
 @SuppressLint("NewApi")
-public class MainActivity extends Activity {
+public class MainActivity extends CommonActivity {
 
 	private final int DCB_RED_MAX = 33;
 	private final int DCB_RED_LENGTH = 6;
@@ -49,6 +52,7 @@ public class MainActivity extends Activity {
 	private final int CHILD_INDEX = 0;
 
 	private Button button_add = null;
+	private TextView title = null;
 	private TextView sub = null;
 	private LayoutTransition mTransitioner = null;
 	private ViewGroup container = null;
@@ -58,6 +62,10 @@ public class MainActivity extends Activity {
 	private Animation anim2 = null;
 	private Animation anim3 = null;
 	private Animation anim4 = null;
+	
+	private NetStatusChangeReciver netStatusChangeReciver;
+	
+	private String IPInfostr = "null";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +73,9 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		llayout = (LinearLayout) findViewById(R.id.master_layout);
+		title = (TextView) findViewById(R.id.title);
+		
 		button_add = (Button) findViewById(R.id.button_add);
-
 		button_add.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -75,9 +84,18 @@ public class MainActivity extends Activity {
 
 			}
 		});
+		
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		netStatusChangeReciver = new NetStatusChangeReciver();
+		registerReceiver(netStatusChangeReciver, filter);
 
 		initEvironment();
 
+	}
+	
+	private void refreshIPInfo(){
+		title.setText(IPInfostr);
 	}
 
 	private void initEvironment() {
@@ -89,6 +107,13 @@ public class MainActivity extends Activity {
 		addBate();
 	}
 
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		unregisterReceiver(netStatusChangeReciver);
+	}
+	
 	private void addBate() {
 
 		container = new LinearLayout(this);
@@ -281,6 +306,26 @@ public class MainActivity extends Activity {
 
 		alert.create().show();
 
+	}
+	
+	
+	class NetStatusChangeReciver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mobileInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+			NetworkInfo wifiInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+			NetworkInfo activeInfo = manager.getActiveNetworkInfo();
+			IPInfostr = "Current NET status:"+activeInfo.getTypeName()+"  ,"+"IP:"+getIpAddress();
+			
+			refreshIPInfo();
+//			
+//			Toast.makeText(context, "mobile:"+mobileInfo.isConnected()+"\n"+"wifi:"+wifiInfo.isConnected()
+//					        +"\n"+"active:"+activeInfo.getTypeName(), 1).show();
+		}
+		
 	}
 
 }
